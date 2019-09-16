@@ -10,8 +10,6 @@ import java.awt.Rectangle;
 import java.util.Iterator;
 import java.util.List;
 
-import org.lwjgl.system.CallbackI.P;
-
 import edu.utc.game.Scene;
 
 public class DemoGame extends Game implements Scene {
