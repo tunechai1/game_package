@@ -5,9 +5,8 @@ import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 
 
-
-public abstract class Game {
-	
+public abstract class Game
+{
 	public static final UI ui = new UI();
 	protected static Scene currScene;
 	
@@ -35,10 +34,6 @@ public abstract class Game {
 			currScene = currScene.drawFrame((int)(1000*(time2-time)));
 			glfwSwapBuffers(ui.getWindow());
 			time=time2;
-
 		}
-
-		
-	}
-
-}
+	}// end method
+}// end class

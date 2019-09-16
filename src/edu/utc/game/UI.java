@@ -12,8 +12,8 @@ import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
-public class UI {
-	
+public class UI
+{
 	private long window;
 	private int width;
 	private int height;
@@ -49,14 +49,16 @@ public class UI {
         this.width=width;
         this.height=height;
 
-	}
-	
+	}// end method
+
 	public long getWindow() { return window; }
+
 	public int getWidth() { return width; }
+
 	public int getHeight() { return height; }
 	
 	public boolean keyPressed(int key) { 
 		return glfwGetKey(window, key) == GLFW_PRESS;
 	}
 
-}
+}// end class

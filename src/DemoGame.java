@@ -6,7 +6,6 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 import java.awt.*;
-import java.awt.Rectangle;
 import java.util.Iterator;
 import java.util.List;
 import edu.utc.game.Scene;
@@ -100,36 +99,36 @@ public class DemoGame extends Game implements Scene {
 
 	private class Player extends GameObject
 	{
-		private Point prevPosition;
+		// private Point prevPosition;
 
 		public Player()
 		{
-			this.hitbox.setSize(10, 10);
-			this.hitbox.setLocation(Game.ui.getWidth()/2-5, Game.ui.getHeight()/2-5);
+			this.hitBox.setSize(10, 10);
+			this.hitBox.setLocation(Game.ui.getWidth()/2-5, Game.ui.getHeight()/2-5);
 			this.setColor(1,0,0);
 		}// end constructor
 
-		public Point getPrevPosition() { return prevPosition; }
+		// public Point getPrevPosition() { return prevPosition; }
 		// this allows you to steer the player object
 		public void update(int delta)
 		{
-			prevPosition = hitbox.getLocation();
+			// prevPosition = hitBox.getLocation();
 			float speed=0.25f;
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_UP))
 			{
-				this.hitbox.translate(0,  (int)(-speed*delta));
+				this.hitBox.translate(0,  (int)(-speed*delta));
 			}
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN))
 			{
-				this.hitbox.translate(0,  (int)(speed*delta));
+				this.hitBox.translate(0,  (int)(speed*delta));
 			}
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT))
 			{
-				this.hitbox.translate((int)(-speed*delta), 0);
+				this.hitBox.translate((int)(-speed*delta), 0);
 			}
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT))
 			{
-				this.hitbox.translate((int)(speed*delta),0);
+				this.hitBox.translate((int)(speed*delta),0);
 			}
 		}// end method
 	}// end class
@@ -139,16 +138,16 @@ public class DemoGame extends Game implements Scene {
 		private Player player;
 		private int size=50;
 		private playerRelation playerRelPos;
-		private int pushForce = 10;
+		private int pushForce = 5;
 		// construct a target in a random location within the bounds of the UI
 		public Target(Player p, float r, float g, float b)
 		{
 			this.player = p;
-			this.hitbox.setSize(size, size);
+			this.hitBox.setSize(size, size);
 			this.setColor(r,g,b);
-			this.hitbox.setLocation(
-					(int)(rand.nextFloat()*Game.ui.getWidth()),
-					(int)(rand.nextFloat()*Game.ui.getHeight()));
+			this.hitBox.setLocation(
+					(int)(rand.nextFloat() * Game.ui.getWidth() - getHitBox().getWidth()),
+					(int)(rand.nextFloat() * Game.ui.getHeight() - getHitBox().getHeight()) );
 			//System.out.println(this.hitbox);
 		}// end constructor
 
@@ -158,39 +157,42 @@ public class DemoGame extends Game implements Scene {
 			setPlayerRelation();
 			if (player.intersects(this))
 			{
-				player.getHitbox().setLocation(player.getPrevPosition());
-				Point playerPos = player.getHitbox().getLocation();
+				player.getHitBox().setLocation(player.getHitBox().getLocation());
+				//player.getHitBox().setLocation(player.getPrevPosition());
+				Point playerPos = player.getHitBox().getLocation();
 				switch (playerRelPos)
 				{
 					case ABOVE:
-						hitbox.translate(0, pushForce);
+						hitBox.translate(0, pushForce);
 						break;
 					case BELOW:
-						hitbox.translate(0, -pushForce);
+						hitBox.translate(0, -pushForce);
 						break;
 					case LEFT:
-						hitbox.translate(pushForce, 0);
+						hitBox.translate(pushForce, 0);
 						break;
 					case RIGHT:
-						hitbox.translate(-pushForce, 0);
+						hitBox.translate(-pushForce, 0);
 						break;
 				}
 			}
-			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE) && player.intersects(this)) {
+
+			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE) && player.intersects(this))
+			{
 				 this.deactivate();
 			}
 		}// end method
 
 		public void setPlayerRelation()
 		{
-			Point playerPos = player.getHitbox().getLocation();
-			Point objPos = getHitbox().getLocation();
+			Point playerPos = player.getHitBox().getLocation();
+			Point objPos = getHitBox().getLocation();
 			if (playerPos.getY() < objPos.getY())
 			{
 				playerRelPos = playerRelation.ABOVE;
 				return;
 			}
-			if (playerPos.getY() > objPos.getY() + getHitbox().getHeight())
+			if (playerPos.getY() > objPos.getY() + getHitBox().getHeight())
 			{
 				playerRelPos = playerRelation.BELOW;
 				return;
@@ -200,7 +202,7 @@ public class DemoGame extends Game implements Scene {
 				playerRelPos = playerRelation.LEFT;
 				return;
 			}
-			if (playerPos.getX() > objPos.getX() + hitbox.getWidth())
+			if (playerPos.getX() > objPos.getX() + hitBox.getWidth())
 			{
 				playerRelPos = playerRelation.RIGHT;
 				return;
