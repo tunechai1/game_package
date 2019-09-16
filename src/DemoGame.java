@@ -128,7 +128,7 @@ public class DemoGame extends Game implements Scene {
 					(int)(rand.nextFloat()*Game.ui.getWidth()),
 					(int)(rand.nextFloat()*Game.ui.getHeight()))
 					;
-			System.out.println(this.hitbox);
+			//System.out.println(this.hitbox);
 		}
 
 		public void update(int delta)
