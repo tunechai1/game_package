@@ -6,11 +6,15 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 
+import java.util.Iterator;
 import java.util.List;
 
 import edu.utc.game.Scene;
 
 public class DemoGame extends Game implements Scene {
+	
+	private static java.util.Random rand=new java.util.Random();
+
 	
 	public static void main(String[] args)
 	{
@@ -19,6 +23,7 @@ public class DemoGame extends Game implements Scene {
 	}
 
 	List<GameObject> gameObjects;
+	Player player;
 	
 	public DemoGame()
 	{
@@ -30,9 +35,18 @@ public class DemoGame extends Game implements Scene {
 		
 		gameObjects = new java.util.LinkedList<GameObject>();
 		
-		gameObjects.add(new Bouncer());
+		player = new Player();
+		spawnTargets(10, 0, 0, 0);
 		
 		
+	}
+	
+	public void spawnTargets(int count, float r, float g, float b)
+	{
+		for (int i=0; i<count; i++)
+		{
+			gameObjects.add(new Target(player, r, g, b));
+		}
 	}
 	
 	public Scene drawFrame(int delta) {
@@ -43,18 +57,34 @@ public class DemoGame extends Game implements Scene {
 		{
 			o.update(delta);
 		}
+		player.update(delta);
+		
+		Iterator<GameObject> it = gameObjects.iterator();
+		while (it.hasNext()) {
+			GameObject o = it.next();
+			if (! o.isActive())
+			{
+				it.remove();
+			}
+		}
+		
+		if (gameObjects.isEmpty()) {
+			spawnTargets(10, 1, 0, 0);
+		}
 		
 		for (GameObject o : gameObjects)
 		{
 			o.draw();
 		}
 		
+		player.draw();
+		
 		return this;
 	}
 	
-	private class Bouncer extends GameObject
+	private class Player extends GameObject
 	{
-		public Bouncer()
+		public Player()
 		{
 			this.hitbox.setSize(10, 10);
 			this.hitbox.setLocation(Game.ui.getWidth()/2-5, Game.ui.getHeight()/2-5);
@@ -63,13 +93,51 @@ public class DemoGame extends Game implements Scene {
 		
 		public void update(int delta)
 		{
+			float speed=0.25f;
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_UP))
 			{
-				this.hitbox.translate(0,  (int)(-0.5*delta));
+				this.hitbox.translate(0,  (int)(-speed*delta));
 			}
-			
+			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN))
+			{
+				this.hitbox.translate(0,  (int)(speed*delta));
+			}
+			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT))
+			{
+				this.hitbox.translate((int)(-speed*delta), 0);
+			}
+			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT))
+			{
+				this.hitbox.translate((int)(speed*delta),0);
+			}
 		}
 	}
 	
+	private class Target extends GameObject
+	{
+		private Player player;
+		private int size=50;
+		
+		
+		public Target(Player p, float r, float g, float b)
+		{
+			this.player = p;
+			this.hitbox.setSize(size, size);
+			this.setColor(r,g,b);
+			this.hitbox.setLocation(
+					(int)(rand.nextFloat()*Game.ui.getWidth()),
+					(int)(rand.nextFloat()*Game.ui.getHeight()))
+					;
+			System.out.println(this.hitbox);
+		}
+
+		public void update(int delta)
+		{
+			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE) && player.intersects(this)) {
+				 this.deactivate();
+			}
+		}
+	
+	}
 
 }

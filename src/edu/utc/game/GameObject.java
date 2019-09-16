@@ -4,6 +4,8 @@ import java.awt.Rectangle;
 
 public  class GameObject {
 	
+	private boolean active=true;
+	
 	protected float r;
 	protected float g;
 	protected float b;
@@ -14,6 +16,14 @@ public  class GameObject {
 		this.r=r;
 		this.g=g;
 		this.b=b;
+	}
+	
+	public boolean isActive() { return active; }
+	public void deactivate() { active=false; }
+	
+	public boolean intersects(GameObject other)
+	{
+		return hitbox.intersects(other.hitbox);
 	}
 	
     public void update(int delta) { }
