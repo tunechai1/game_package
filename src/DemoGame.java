@@ -6,8 +6,11 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 
+import java.awt.Rectangle;
 import java.util.Iterator;
 import java.util.List;
+
+import org.lwjgl.system.CallbackI.P;
 
 import edu.utc.game.Scene;
 
@@ -63,12 +66,13 @@ public class DemoGame extends Game implements Scene {
 	public Scene drawFrame(int delta) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
+		player.update(delta);
+
 		// update all targets and player object
 		for (GameObject o : targets)
 		{
 			o.update(delta);
 		}
-		player.update(delta);
 		
 		// check for deactivated objects
 		Iterator<GameObject> it = targets.iterator();
@@ -97,8 +101,14 @@ public class DemoGame extends Game implements Scene {
 		return this;
 	}
 	
+	public static enum DIR { LEFT, RIGHT, UP, DOWN };
+	
 	private class Player extends GameObject
 	{
+
+		
+		public DIR direction;
+		
 		public Player()
 		{
 			this.hitbox.setSize(10, 10);
@@ -113,18 +123,22 @@ public class DemoGame extends Game implements Scene {
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_UP))
 			{
 				this.hitbox.translate(0,  (int)(-speed*delta));
+				direction=DIR.UP;
 			}
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN))
 			{
 				this.hitbox.translate(0,  (int)(speed*delta));
+				direction=DIR.DOWN;
 			}
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT))
 			{
 				this.hitbox.translate((int)(-speed*delta), 0);
+				direction=DIR.LEFT;
 			}
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT))
 			{
 				this.hitbox.translate((int)(speed*delta),0);
+				direction=DIR.RIGHT;
 			}
 		}
 	}
@@ -151,8 +165,31 @@ public class DemoGame extends Game implements Scene {
 		// if the space key is pressed, check to see if we should deactivate this target
 		public void update(int delta)
 		{
-			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE) && player.intersects(this)) {
-				 this.deactivate();
+			if (//Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE) && 
+					player.intersects(this)) {
+				
+				Rectangle overlap=player.intersection(this);
+				int dx=0;
+				int dy=0;
+				
+				switch (player.direction)
+				{
+				case LEFT: dx=-(int)overlap.getWidth(); break;
+				case RIGHT: dx=(int)overlap.getWidth(); break;
+				case UP: dy=-(int)overlap.getHeight(); break;
+				case DOWN: dy=(int)overlap.getHeight(); break;
+				
+				}
+				this.hitbox.translate(dx, dy);
+				// this.deactivate();
+				
+				if (this.hitbox.getX() < 0 || 
+					this.hitbox.getX()> Game.ui.getWidth() ||
+					this.hitbox.getY() < 0 ||
+					this.hitbox.getY() > Game.ui.getHeight())
+				{
+					this.deactivate();
+				}
 			}
 		}
 	
