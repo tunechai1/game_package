@@ -5,20 +5,20 @@ import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
-
 import java.awt.*;
+import java.awt.Rectangle;
 import java.util.Iterator;
 import java.util.List;
-
 import edu.utc.game.Scene;
+
 enum playerRelation
 {
 	LEFT, RIGHT, ABOVE, BELOW
 }
+
 public class DemoGame extends Game implements Scene {
 	
 	private static java.util.Random rand=new java.util.Random();
-
 	
 	public static void main(String[] args)
 	{
@@ -27,7 +27,6 @@ public class DemoGame extends Game implements Scene {
 		game.gameLoop();
 	}
 
-	
 	// DemoGame instance data
 	
 	List<GameObject> targets;
@@ -41,15 +40,12 @@ public class DemoGame extends Game implements Scene {
 
 		// screen clear is white (this could go in drawFrame if you wanted it to change
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		
-		
+
 		targets = new java.util.LinkedList<GameObject>();
 		
 		player = new Player();
 		spawnTargets(10);
-		
-		
-	}
+	}// end constructor
 	
 	public void spawnTargets(int count)
 	{
@@ -61,18 +57,19 @@ public class DemoGame extends Game implements Scene {
 		{
 			targets.add(new Target(player, r, g, b));
 		}
-	}
+	}// end method
 	
 	
 	public Scene drawFrame(int delta) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+
+		player.update(delta);
 
 		// update all targets and player object
 		for (GameObject o : targets)
 		{
 			o.update(delta);
 		}
-		player.update(delta);
 		
 		// check for deactivated objects
 		Iterator<GameObject> it = targets.iterator();
@@ -99,17 +96,18 @@ public class DemoGame extends Game implements Scene {
 		player.draw();
 		
 		return this;
-	}
-	
+	}// end method
+
 	private class Player extends GameObject
 	{
 		private Point prevPosition;
+
 		public Player()
 		{
 			this.hitbox.setSize(10, 10);
 			this.hitbox.setLocation(Game.ui.getWidth()/2-5, Game.ui.getHeight()/2-5);
 			this.setColor(1,0,0);
-		}
+		}// end constructor
 
 		public Point getPrevPosition() { return prevPosition; }
 		// this allows you to steer the player object
@@ -133,8 +131,8 @@ public class DemoGame extends Game implements Scene {
 			{
 				this.hitbox.translate((int)(speed*delta),0);
 			}
-		}
-	}
+		}// end method
+	}// end class
 	
 	private class Target extends GameObject
 	{
@@ -150,10 +148,9 @@ public class DemoGame extends Game implements Scene {
 			this.setColor(r,g,b);
 			this.hitbox.setLocation(
 					(int)(rand.nextFloat()*Game.ui.getWidth()),
-					(int)(rand.nextFloat()*Game.ui.getHeight()))
-					;
+					(int)(rand.nextFloat()*Game.ui.getHeight()));
 			//System.out.println(this.hitbox);
-		}
+		}// end constructor
 
 		// if the space key is pressed, check to see if we should deactivate this target
 		public void update(int delta)
@@ -162,7 +159,6 @@ public class DemoGame extends Game implements Scene {
 			if (player.intersects(this))
 			{
 				player.getHitbox().setLocation(player.getPrevPosition());
-				// player.getHitbox().setLocation(0, 0);
 				Point playerPos = player.getHitbox().getLocation();
 				switch (playerRelPos)
 				{
@@ -177,6 +173,7 @@ public class DemoGame extends Game implements Scene {
 						break;
 					case RIGHT:
 						hitbox.translate(-pushForce, 0);
+						break;
 				}
 			}
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE) && player.intersects(this)) {
@@ -208,6 +205,6 @@ public class DemoGame extends Game implements Scene {
 				playerRelPos = playerRelation.RIGHT;
 				return;
 			}
-		}
+		}//end method
 	}// end class
 }// end class

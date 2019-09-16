@@ -29,6 +29,11 @@ public  class GameObject {
 		return hitbox.intersects(other.hitbox);
 	}
 	
+	public Rectangle intersection(GameObject other)
+	{
+		return hitbox.intersection(other.hitbox);
+	}
+	
     public void update(int delta) { }
     
     public void draw() { 
