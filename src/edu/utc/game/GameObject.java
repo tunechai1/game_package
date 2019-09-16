@@ -12,12 +12,15 @@ public  class GameObject {
 
 	protected Rectangle hitbox=new Rectangle();
 
+	public Rectangle getHitbox() { return hitbox; }
+
 	protected void setColor(float r, float g, float b) {
 		this.r=r;
 		this.g=g;
 		this.b=b;
 	}
-	
+
+
 	public boolean isActive() { return active; }
 	public void deactivate() { active=false; }
 	

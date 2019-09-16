@@ -6,11 +6,15 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
 
+import java.awt.*;
 import java.util.Iterator;
 import java.util.List;
 
 import edu.utc.game.Scene;
-
+enum playerRelation
+{
+	LEFT, RIGHT, ABOVE, BELOW
+}
 public class DemoGame extends Game implements Scene {
 	
 	private static java.util.Random rand=new java.util.Random();
@@ -36,7 +40,7 @@ public class DemoGame extends Game implements Scene {
 		initUI(640, 480, "DemoGame");
 
 		// screen clear is white (this could go in drawFrame if you wanted it to change
-		glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		
 		
 		targets = new java.util.LinkedList<GameObject>();
@@ -99,16 +103,19 @@ public class DemoGame extends Game implements Scene {
 	
 	private class Player extends GameObject
 	{
+		private Point prevPosition;
 		public Player()
 		{
 			this.hitbox.setSize(10, 10);
 			this.hitbox.setLocation(Game.ui.getWidth()/2-5, Game.ui.getHeight()/2-5);
 			this.setColor(1,0,0);
 		}
-		
+
+		public Point getPrevPosition() { return prevPosition; }
 		// this allows you to steer the player object
 		public void update(int delta)
 		{
+			prevPosition = hitbox.getLocation();
 			float speed=0.25f;
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_UP))
 			{
@@ -133,8 +140,8 @@ public class DemoGame extends Game implements Scene {
 	{
 		private Player player;
 		private int size=50;
-		
-		
+		private playerRelation playerRelPos;
+		private int pushForce = 10;
 		// construct a target in a random location within the bounds of the UI
 		public Target(Player p, float r, float g, float b)
 		{
@@ -151,11 +158,56 @@ public class DemoGame extends Game implements Scene {
 		// if the space key is pressed, check to see if we should deactivate this target
 		public void update(int delta)
 		{
+			setPlayerRelation();
+			if (player.intersects(this))
+			{
+				player.getHitbox().setLocation(player.getPrevPosition());
+				// player.getHitbox().setLocation(0, 0);
+				Point playerPos = player.getHitbox().getLocation();
+				switch (playerRelPos)
+				{
+					case ABOVE:
+						hitbox.translate(0, pushForce);
+						break;
+					case BELOW:
+						hitbox.translate(0, -pushForce);
+						break;
+					case LEFT:
+						hitbox.translate(pushForce, 0);
+						break;
+					case RIGHT:
+						hitbox.translate(-pushForce, 0);
+				}
+			}
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE) && player.intersects(this)) {
 				 this.deactivate();
 			}
-		}
-	
-	}
+		}// end method
 
-}
+		public void setPlayerRelation()
+		{
+			Point playerPos = player.getHitbox().getLocation();
+			Point objPos = getHitbox().getLocation();
+			if (playerPos.getY() < objPos.getY())
+			{
+				playerRelPos = playerRelation.ABOVE;
+				return;
+			}
+			if (playerPos.getY() > objPos.getY() + getHitbox().getHeight())
+			{
+				playerRelPos = playerRelation.BELOW;
+				return;
+			}
+			if (playerPos.getX() < objPos.getX())
+			{
+				playerRelPos = playerRelation.LEFT;
+				return;
+			}
+			if (playerPos.getX() > objPos.getX() + hitbox.getWidth())
+			{
+				playerRelPos = playerRelation.RIGHT;
+				return;
+			}
+		}
+	}// end class
+}// end class
