@@ -18,48 +18,60 @@ public class DemoGame extends Game implements Scene {
 	
 	public static void main(String[] args)
 	{
+		// construct a DemoGame object and launch the game loop
 		DemoGame game = new DemoGame();
 		game.gameLoop();
 	}
 
-	List<GameObject> gameObjects;
+	
+	// DemoGame instance data
+	
+	List<GameObject> targets;
 	Player player;
 	
 	public DemoGame()
 	{
+		// inherited from the Game class, this sets up the window and allows us to access
+		// Game.ui
 		initUI(640, 480, "DemoGame");
 
 		// screen clear is white (this could go in drawFrame if you wanted it to change
 		glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 		
 		
-		gameObjects = new java.util.LinkedList<GameObject>();
+		targets = new java.util.LinkedList<GameObject>();
 		
 		player = new Player();
-		spawnTargets(10, 0, 0, 0);
+		spawnTargets(10);
 		
 		
 	}
 	
-	public void spawnTargets(int count, float r, float g, float b)
+	public void spawnTargets(int count)
 	{
+		float r = rand.nextFloat()*0.5f+0.25f;
+		float g = rand.nextFloat()*0.5f+0.25f;
+		float b = rand.nextFloat()*0.5f+0.25f;
+		
 		for (int i=0; i<count; i++)
 		{
-			gameObjects.add(new Target(player, r, g, b));
+			targets.add(new Target(player, r, g, b));
 		}
 	}
+	
 	
 	public Scene drawFrame(int delta) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
-		
-		for (GameObject o : gameObjects)
+		// update all targets and player object
+		for (GameObject o : targets)
 		{
 			o.update(delta);
 		}
 		player.update(delta);
 		
-		Iterator<GameObject> it = gameObjects.iterator();
+		// check for deactivated objects
+		Iterator<GameObject> it = targets.iterator();
 		while (it.hasNext()) {
 			GameObject o = it.next();
 			if (! o.isActive())
@@ -68,15 +80,18 @@ public class DemoGame extends Game implements Scene {
 			}
 		}
 		
-		if (gameObjects.isEmpty()) {
-			spawnTargets(10, 1, 0, 0);
+		// if all targets have been destroyed, spawn some more
+		if (targets.isEmpty()) {
+			spawnTargets(10);
 		}
 		
-		for (GameObject o : gameObjects)
+		// draw existing targets
+		for (GameObject o : targets)
 		{
 			o.draw();
 		}
 		
+		// draw the player last so it will appear on top of targets
 		player.draw();
 		
 		return this;
@@ -91,6 +106,7 @@ public class DemoGame extends Game implements Scene {
 			this.setColor(1,0,0);
 		}
 		
+		// this allows you to steer the player object
 		public void update(int delta)
 		{
 			float speed=0.25f;
@@ -119,6 +135,7 @@ public class DemoGame extends Game implements Scene {
 		private int size=50;
 		
 		
+		// construct a target in a random location within the bounds of the UI
 		public Target(Player p, float r, float g, float b)
 		{
 			this.player = p;
@@ -131,6 +148,7 @@ public class DemoGame extends Game implements Scene {
 			//System.out.println(this.hitbox);
 		}
 
+		// if the space key is pressed, check to see if we should deactivate this target
 		public void update(int delta)
 		{
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE) && player.intersects(this)) {
