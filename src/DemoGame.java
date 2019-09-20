@@ -109,8 +109,8 @@ public class DemoGame extends Game implements Scene {
 		
 		public Player()
 		{
-			this.hitbox.setSize(10, 10);
-			this.hitbox.setLocation(Game.ui.getWidth()/2-5, Game.ui.getHeight()/2-5);
+			this.hitBox.setSize(10, 10);
+			this.hitBox.setLocation(Game.ui.getWidth()/2-5, Game.ui.getHeight()/2-5);
 			this.setColor(1,0,0);
 		}
 		
@@ -120,22 +120,22 @@ public class DemoGame extends Game implements Scene {
 			float speed=0.25f;
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_UP))
 			{
-				this.hitbox.translate(0,  (int)(-speed*delta));
+				this.hitBox.translate(0,  (int)(-speed*delta));
 				direction=DIR.UP;
 			}
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN))
 			{
-				this.hitbox.translate(0,  (int)(speed*delta));
+				this.hitBox.translate(0,  (int)(speed*delta));
 				direction=DIR.DOWN;
 			}
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT))
 			{
-				this.hitbox.translate((int)(-speed*delta), 0);
+				this.hitBox.translate((int)(-speed*delta), 0);
 				direction=DIR.LEFT;
 			}
 			if (Game.ui.keyPressed(org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT))
 			{
-				this.hitbox.translate((int)(speed*delta),0);
+				this.hitBox.translate((int)(speed*delta),0);
 				direction=DIR.RIGHT;
 			}
 		}
@@ -151,9 +151,9 @@ public class DemoGame extends Game implements Scene {
 		public Target(Player p, float r, float g, float b)
 		{
 			this.player = p;
-			this.hitbox.setSize(size, size);
+			this.hitBox.setSize(size, size);
 			this.setColor(r,g,b);
-			this.hitbox.setLocation(
+			this.hitBox.setLocation(
 					(int)(rand.nextFloat()*Game.ui.getWidth()),
 					(int)(rand.nextFloat()*Game.ui.getHeight()))
 					;
@@ -178,13 +178,13 @@ public class DemoGame extends Game implements Scene {
 				case DOWN: dy=(int)overlap.getHeight(); break;
 				
 				}
-				this.hitbox.translate(dx, dy);
+				this.hitBox.translate(dx, dy);
 				// this.deactivate();
 				
-				if (this.hitbox.getX() < 0 || 
-					this.hitbox.getX()> Game.ui.getWidth() ||
-					this.hitbox.getY() < 0 ||
-					this.hitbox.getY() > Game.ui.getHeight())
+				if (this.hitBox.getX() < 0 ||
+					this.hitBox.getX()> Game.ui.getWidth() ||
+					this.hitBox.getY() < 0 ||
+					this.hitBox.getY() > Game.ui.getHeight())
 				{
 					this.deactivate();
 				}

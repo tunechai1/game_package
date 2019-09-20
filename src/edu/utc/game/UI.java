@@ -20,8 +20,6 @@ public class UI {
 	
 	public void init(int width, int height, String title)
 	{
-		
-		
 		if ( !glfwInit() )
 			throw new IllegalStateException("Unable to initialize GLFW");
 		
@@ -48,15 +46,15 @@ public class UI {
         
         this.width=width;
         this.height=height;
-
-	}
+	}// end method
 	
-	public long getWindow() { return window; }
-	public int getWidth() { return width; }
-	public int getHeight() { return height; }
+	public long getWindow() { return window; }// end method
+
+	public int getWidth() { return width; }// end method
+
+	public int getHeight() { return height; }// end method
 	
 	public boolean keyPressed(int key) { 
 		return glfwGetKey(window, key) == GLFW_PRESS;
-	}
-
-}
+	}// end method
+}// end class

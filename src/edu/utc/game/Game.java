@@ -14,12 +14,12 @@ public abstract class Game {
 	public void initUI(int width, int height, String title)
 	{
 		ui.init(width, height, title);
-	}
+	}// end method
 	
 	public void setScene(Scene s) 
 	{
 		currScene = s;
-	}
+	}// end method
 	
 	public void gameLoop()
 	{
@@ -35,10 +35,6 @@ public abstract class Game {
 			currScene = currScene.drawFrame((int)(1000*(time2-time)));
 			glfwSwapBuffers(ui.getWindow());
 			time=time2;
-
 		}
-
-		
-	}
-
-}
+	}// end method
+}// end class
