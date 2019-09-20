@@ -12,8 +12,8 @@ import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
-public class UI {
-	
+public class UI
+{
 	private long window;
 	private int width;
 	private int height;
