@@ -18,7 +18,30 @@ public  class GameObject
 		this.g = g;
 		this.b = b;
 	}// end method
-	
+
+	public void bound(int minX, int maxX, int minY, int maxY)
+	{
+		int x = (int)this.hitBox.getX();
+		int y = (int)this.hitBox.getY();
+
+		if (y <= minY)
+		{
+			this.hitBox.setLocation(x, minY);
+		}
+		else if (y >= maxY)
+		{
+			this.hitBox.setLocation(x, maxY);
+		}
+		if (x >= maxX)
+		{
+			this.hitBox.setLocation(maxX, y);
+		}
+		else if (x <= minX) {
+			this.hitBox.setLocation(minX, y);
+		}
+
+	}// end method
+
 	public boolean isActive() { return active; }// end method
 
 	public void deactivate() { active=false; }// end method
