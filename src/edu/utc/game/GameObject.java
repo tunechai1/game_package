@@ -9,13 +9,17 @@ public  class GameObject {
 	protected float r;
 	protected float g;
 	protected float b;
-
+	
 	protected Rectangle hitbox=new Rectangle();
 
 	protected void setColor(float r, float g, float b) {
 		this.r=r;
 		this.g=g;
 		this.b=b;
+	}
+	
+	protected void setTexture(String path) {
+		
 	}
 	
 	public boolean isActive() { return active; }
@@ -29,6 +33,11 @@ public  class GameObject {
 	public Rectangle intersection(GameObject other)
 	{
 		return hitbox.intersection(other.hitbox);
+	}
+	
+	public Rectangle getHitbox()
+	{
+		return hitbox;
 	}
 	
     public void update(int delta) { }

@@ -105,7 +105,7 @@ public class DemoGame extends Game implements Scene {
 	{
 
 		
-		public DIR direction;
+		public DIR direction=DIR.LEFT;
 		
 		public Player()
 		{
