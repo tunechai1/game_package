@@ -5,6 +5,14 @@ import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
 import static org.lwjgl.system.MemoryUtil.NULL;
+
+import org.lwjgl.openal.AL;
+import org.lwjgl.openal.ALC;
+import org.lwjgl.openal.ALC10;
+import org.lwjgl.openal.ALCCapabilities;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+
 import static org.lwjgl.glfw.GLFW.glfwGetKey;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 
@@ -50,6 +58,13 @@ public class UI {
     	GL11.glEnable(GL11.GL_BLEND);
     	GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
+    	// Can call "alc" functions at any time
+    	long device = ALC10.alcOpenDevice((ByteBuffer)null);
+    	ALCCapabilities deviceCaps = ALC.createCapabilities(device);
+
+    	long context = ALC10.alcCreateContext(device, (IntBuffer)null);
+    	ALC10.alcMakeContextCurrent(context);
+    	AL.createCapabilities(deviceCaps);    	
         this.width=width;
         this.height=height;
 
