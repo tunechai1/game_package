@@ -8,7 +8,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import org.lwjgl.openal.AL10;
-import org.lwjgl.stb.STBVorbisInfo;
 
 public class Sound {
 	private int soundID;
@@ -17,6 +16,7 @@ public class Sound {
 	{
 		try
 		{
+			// this is ugly!
 			AudioInputStream ais = AudioSystem.getAudioInputStream(new File(path));
 			AudioFormat aif = ais.getFormat();
 			ByteBuffer buf = ByteBuffer.allocateDirect(ais.available());
@@ -58,6 +58,16 @@ public class Sound {
 	{
 		AL10.alSourceStop(soundID);
 	}
+	
+	public void setGain(float g)
+	{
+		AL10.alSourcef(soundID,  AL10.AL_GAIN, g);
+	}
 		
+	public void setLoop(boolean b)
+	{
+		AL10.alSourcei(soundID, AL10.AL_LOOPING, b?1:0);
+	}
+	
 	
 }

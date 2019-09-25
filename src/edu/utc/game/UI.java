@@ -1,9 +1,17 @@
 package edu.utc.game;
 
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
+import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
+import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
+import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.glfw.GLFW.glfwInit;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
+import static org.lwjgl.glfw.GLFW.glfwTerminate;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import org.lwjgl.openal.AL;
@@ -14,8 +22,14 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.glfwGetKey;
+import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
+import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
-
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
+import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
+import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
@@ -29,7 +43,7 @@ public class UI {
 	public void init(int width, int height, String title)
 	{
 		
-		
+		// initialize graphics
 		if ( !glfwInit() )
 			throw new IllegalStateException("Unable to initialize GLFW");
 		
@@ -38,11 +52,17 @@ public class UI {
 
 		if ( window == NULL )
 			throw new RuntimeException("Failed to create the GLFW window");
-
+		glfwDefaultWindowHints();
+		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
+		
 		//set up OpenGL
 		glfwMakeContextCurrent(window);
 		GL.createCapabilities();
 		glfwSwapInterval(1);
+		
+		
+		
 		
 		// set projection to dimensions of window
         // set viewport to entire window
@@ -58,7 +78,7 @@ public class UI {
     	GL11.glEnable(GL11.GL_BLEND);
     	GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-    	// Can call "alc" functions at any time
+    	// initialize audio system
     	long device = ALC10.alcOpenDevice((ByteBuffer)null);
     	ALCCapabilities deviceCaps = ALC.createCapabilities(device);
 
@@ -67,6 +87,8 @@ public class UI {
     	AL.createCapabilities(deviceCaps);    	
         this.width=width;
         this.height=height;
+        
+        glfwShowWindow(window);
 
 	}
 	
@@ -77,5 +99,19 @@ public class UI {
 	public boolean keyPressed(int key) { 
 		return glfwGetKey(window, key) == GLFW_PRESS;
 	}
+	
+	public void destroy(){
+			ALC.destroy();
+			
+
+			// these cleanup calls are supposedly desirable, but they crash in my tests
+			//glfwFreeCallbacks(window);
+			//glfwDestroyWindow(window);
+
+			// Terminate GLFW and free the error callback
+			//glfwSetErrorCallback(null).free();
+			//glfwTerminate();
+	}
+	
 
 }
