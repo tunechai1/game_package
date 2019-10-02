@@ -1,5 +1,6 @@
 package edu.utc.game;
 
+import org.lwjgl.glfw.GLFW;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
@@ -29,6 +30,7 @@ import org.lwjgl.opengl.GL11;
 public class UI {
 	
 	private long window;
+	private long audioDevice;
 	private int width;
 	private int height;
 	
@@ -47,6 +49,7 @@ public class UI {
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
+	
 		
 		//set up OpenGL
 		glfwMakeContextCurrent(window);
@@ -71,10 +74,10 @@ public class UI {
     	GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
     	// initialize audio system
-    	long device = ALC10.alcOpenDevice((ByteBuffer)null);
-    	ALCCapabilities deviceCaps = ALC.createCapabilities(device);
+    	audioDevice = ALC10.alcOpenDevice((ByteBuffer)null);
+    	ALCCapabilities deviceCaps = ALC.createCapabilities(audioDevice);
 
-    	long context = ALC10.alcCreateContext(device, (IntBuffer)null);
+    	long context = ALC10.alcCreateContext(audioDevice, (IntBuffer)null);
     	ALC10.alcMakeContextCurrent(context);
     	AL.createCapabilities(deviceCaps);    	
         this.width=width;
@@ -82,6 +85,45 @@ public class UI {
         
         glfwShowWindow(window);
 
+	}
+	
+	public void showMouseCursor(boolean show)
+	{
+		if (show)
+		{
+			GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);	
+		}
+		else
+		{
+			GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
+			
+		}
+	}
+	
+	public void enableMouseCursor(boolean enable)
+	{
+		if (enable)
+		{
+			GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);	
+		}
+		else
+		{
+			GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+			
+		}
+	}
+	
+	public XYPair<Integer> getMouseLocation()
+	{
+		double[] x = new double[1];
+		double[] y = new double[1];
+		GLFW.glfwGetCursorPos(window,  x,  y);
+		return new XYPair<Integer>((int)x[0],(int)y[0]);
+	}
+	
+	public boolean mouseButtonIsPressed(int button)
+	{
+		return GLFW.glfwGetMouseButton(window, button) == GLFW.GLFW_PRESS;
 	}
 	
 	public long getWindow() { return window; }
@@ -93,16 +135,14 @@ public class UI {
 	}
 	
 	public void destroy(){
-			ALC.destroy();
-			
+		ALC10.alcCloseDevice(audioDevice);
+		ALC.destroy();
 
-			// these cleanup calls are supposedly desirable, but they crash in my tests
-			//glfwFreeCallbacks(window);
-			//glfwDestroyWindow(window);
 
-			// Terminate GLFW and free the error callback
-			//glfwSetErrorCallback(null).free();
-			//glfwTerminate();
+		// these cleanup calls are supposedly desirable, but they crash in my tests
+		org.lwjgl.glfw.Callbacks.glfwFreeCallbacks(window);
+		GLFW.glfwDestroyWindow(window);
+		GLFW.glfwTerminate();
 	}
 	
 
