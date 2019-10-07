@@ -11,7 +11,7 @@ public  class GameObject
 	protected float g;
 	protected float b;
 
-	protected Rectangle hitBox =new Rectangle();
+	protected Rectangle hitbox =new Rectangle();
 
 	protected void setColor(float r, float g, float b) {
 		this.r = r;
@@ -21,23 +21,23 @@ public  class GameObject
 
 	public void bound(int minX, int maxX, int minY, int maxY)
 	{
-		int x = (int)this.hitBox.getX();
-		int y = (int)this.hitBox.getY();
+		int x = (int)this.hitbox.getX();
+		int y = (int)this.hitbox.getY();
 
 		if (y <= minY)
 		{
-			this.hitBox.setLocation(x, minY);
+			this.hitbox.setLocation(x, minY);
 		}
 		else if (y >= maxY)
 		{
-			this.hitBox.setLocation(x, maxY);
+			this.hitbox.setLocation(x, maxY);
 		}
 		if (x >= maxX)
 		{
-			this.hitBox.setLocation(maxX, y);
+			this.hitbox.setLocation(maxX, y);
 		}
 		else if (x <= minX) {
-			this.hitBox.setLocation(minX, y);
+			this.hitbox.setLocation(minX, y);
 		}
 
 	}// end method
@@ -46,18 +46,17 @@ public  class GameObject
 
 	public void deactivate() { active=false; }// end method
 
-	public Rectangle getHitBox() { return hitBox; }// end method
-
+	public Rectangle getHitbox() { return hitbox; }// end method
 	
 	public boolean intersects(GameObject other)
 	{
-		return hitBox.intersects(other.hitBox);
+		return hitbox.intersects(other.hitbox);
 
 	}// end method
 	
 	public Rectangle intersection(GameObject other)
 	{
-		return hitBox.intersection(other.hitBox);
+		return hitbox.intersection(other.hitbox);
 	}// end method
 	
     public void update(int delta) { }// end method
@@ -66,10 +65,10 @@ public  class GameObject
 	{
     	GL11.glColor3f(r, g, b);
 
-    	float x=(float) hitBox.getX();
-    	float y=(float) hitBox.getY();
-    	float width=(float) hitBox.getWidth();
-    	float height=(float) hitBox.getHeight();
+    	float x=(float) hitbox.getX();
+    	float y=(float) hitbox.getY();
+    	float width=(float) hitbox.getWidth();
+    	float height=(float) hitbox.getHeight();
 
         GL11.glBegin(GL11.GL_QUADS);
         GL11.glVertex2f(x, y);
