@@ -5,13 +5,15 @@ public class Animation
     private Texture[] frames;
     private Texture currentFrame;
     private int elapsedTime = 0;
-    private int framesPerSecond = 1;
+    private int frameLengthMs;
     private int pointer = 0;
+    private float renderWidth;
+    private float renderHeight;
 
-    public Animation(Texture[] frames, int framesPerSecond)
+    public Animation(Texture[] frames, int frameLengthMs)
     {
         this.frames = frames;
-        this.framesPerSecond = framesPerSecond;
+        this.frameLengthMs = frameLengthMs;
         try
         {
             this.currentFrame = frames[pointer];
@@ -27,7 +29,7 @@ public class Animation
         System.out.println(elapsedTime);
         elapsedTime += delta;
         System.out.println("pointer:" + pointer);
-        if (elapsedTime / 1000 > framesPerSecond)
+        if (elapsedTime > frameLengthMs)
         {
             elapsedTime = 0;
             this.pointer = (this.pointer == frames.length - 1) ? 0: this.pointer + 1;
@@ -36,5 +38,43 @@ public class Animation
         return this.currentFrame;
     }
 
-    // public Texture getCurrentFrame(){ return this.currentFrame; }
+    public Texture[] getFrames() {
+        return frames;
+    }
+
+    public void setFrames(Texture[] frames) {
+        this.frames = frames;
+    }
+
+    public Texture getCurrentFrame() {
+        return currentFrame;
+    }
+
+    public void setCurrentFrame(Texture currentFrame) {
+        this.currentFrame = currentFrame;
+    }
+
+    public int getElapsedTime() {
+        return elapsedTime;
+    }
+
+    public void setElapsedTime(int elapsedTime) {
+        this.elapsedTime = elapsedTime;
+    }
+
+    public int getFrameLengthMs() {
+        return frameLengthMs;
+    }
+
+    public void setFrameLengthMs(int frameLengthMs) {
+        this.frameLengthMs = frameLengthMs;
+    }
+
+    public int getPointer() {
+        return pointer;
+    }
+
+    public void setPointer(int pointer) {
+        this.pointer = pointer;
+    }
 }// end class

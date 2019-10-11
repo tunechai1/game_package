@@ -17,7 +17,23 @@ public  class GameObject {
 		this.g=g;
 		this.b=b;
 	}
-	
+
+	public void bound(int minX, int maxX, int minY, int maxY) {
+		int x = (int) this.hitbox.getX();
+		int y = (int) this.hitbox.getY();
+
+		if (y <= minY) {
+			this.hitbox.setLocation(x, minY);
+		} else if (y >= maxY) {
+			this.hitbox.setLocation(x, maxY);
+		}
+		if (x >= maxX) {
+			this.hitbox.setLocation(maxX, y);
+		} else if (x <= minX) {
+			this.hitbox.setLocation(minX, y);
+		}
+	}
+
 	protected void setTexture(String path) {
 		
 	}

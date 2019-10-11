@@ -14,6 +14,8 @@ public class Texture {
 	private int id;
 	private int imgWidth;
 	private int imgHeight;
+	private XYPair<Float> renderStartP = new XYPair<>((float) 0, (float) 0);
+	private XYPair<Float> renderEndP;
 
 	public Texture(String path)
 	{
@@ -42,6 +44,30 @@ public class Texture {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D,0);
 
 		}
+	}
+
+	public int getImgWidth() {
+		return imgWidth;
+	}
+
+	public int getImgHeight() {
+		return imgHeight;
+	}
+
+	public XYPair<Float> getRenderStartP() {
+		return renderStartP;
+	}
+
+	public void setRenderStartP(XYPair<Float> renderStartP) {
+		this.renderStartP = renderStartP;
+	}
+
+	public XYPair<Float> getRenderEndP() {
+		return renderEndP;
+	}
+
+	public void setRenderEndP(XYPair<Float> renderEndP) {
+		this.renderEndP = renderEndP;
 	}
 
 	public void bind()
