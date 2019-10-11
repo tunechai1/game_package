@@ -35,5 +35,6 @@ public abstract class Game
 			glfwSwapBuffers(ui.getWindow());
 			time=time2;
 		}
+		ui.destroy();
 	}// end method
 }// end class

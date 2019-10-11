@@ -11,7 +11,7 @@ public  class GameObject
 	protected float g;
 	protected float b;
 
-	protected Rectangle hitbox =new Rectangle();
+	protected Rectangle hitbox = new Rectangle();
 
 	protected void setColor(float r, float g, float b) {
 		this.r = r;
