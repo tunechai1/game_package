@@ -2,79 +2,64 @@ package edu.utc.game;
 
 public class Animation
 {
-    private Texture[] frames;
-    private Texture currentFrame;
-    private int elapsedTime = 0;
+    private Texture frames;
     private int frameLengthMs;
-    private int pointer = 0;
-    private float renderWidth;
-    private float renderHeight;
+    private int framesInSheet;
+    private int currentFrame = 0;
+    private int elapsedTime = 0;
 
-    public Animation(Texture[] frames, int frameLengthMs)
+    public Animation(Texture frames, int framesInSheet, int frameLengthMs)
     {
+        this.framesInSheet = framesInSheet;
         this.frames = frames;
         this.frameLengthMs = frameLengthMs;
-        try
-        {
-            this.currentFrame = frames[pointer];
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        frames.setRenderStartP(new XYPair<>(0f, 0f));
+        frames.setRenderEndP(new XYPair<>((1f / framesInSheet), 1f));
     }// end constructor
 
-    public Texture play(int delta)
+    public int play(int delta)
     {
         System.out.println(elapsedTime);
         elapsedTime += delta;
-        System.out.println("pointer:" + pointer);
         if (elapsedTime > frameLengthMs)
         {
             elapsedTime = 0;
-            this.pointer = (this.pointer == frames.length - 1) ? 0: this.pointer + 1;
-            this.currentFrame = frames[pointer];
+            currentFrame = (currentFrame >= framesInSheet - 1)? 0: currentFrame + 1;
+            frames.setRenderStartP(new XYPair<>((1f / framesInSheet) * currentFrame, 0f));
+            frames.setRenderEndP(new XYPair<>((1f / framesInSheet) * (currentFrame + 1), 1f));
         }
         return this.currentFrame;
-    }
+    }// end method
 
-    public Texture[] getFrames() {
+    public Texture getFrames() {
         return frames;
-    }
+    }// end method
 
-    public void setFrames(Texture[] frames) {
+    public void setFrames(Texture frames) {
         this.frames = frames;
-    }
+    }// end method
 
-    public Texture getCurrentFrame() {
+    public int getCurrentFrame() {
         return currentFrame;
-    }
+    }// end method
 
-    public void setCurrentFrame(Texture currentFrame) {
+    public void setCurrentFrame(int currentFrame) {
         this.currentFrame = currentFrame;
-    }
+    }// end method
 
     public int getElapsedTime() {
         return elapsedTime;
-    }
+    }// end method
 
     public void setElapsedTime(int elapsedTime) {
         this.elapsedTime = elapsedTime;
-    }
+    }// end method
 
     public int getFrameLengthMs() {
         return frameLengthMs;
-    }
+    }// end method
 
     public void setFrameLengthMs(int frameLengthMs) {
         this.frameLengthMs = frameLengthMs;
-    }
-
-    public int getPointer() {
-        return pointer;
-    }
-
-    public void setPointer(int pointer) {
-        this.pointer = pointer;
-    }
+    }// end method
 }// end class
