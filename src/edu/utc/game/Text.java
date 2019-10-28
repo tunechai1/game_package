@@ -13,7 +13,7 @@ import static org.lwjgl.stb.STBImage.stbi_failure_reason;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 
-public class Text {
+public class Text extends GameObject {
 
     //Map the desired character to its index in the texture
     private static Map<String, Integer> characterMap;
