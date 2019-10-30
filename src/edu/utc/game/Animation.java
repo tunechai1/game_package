@@ -19,7 +19,7 @@ public class Animation
 
     public int play(int delta)
     {
-        System.out.println(elapsedTime);
+        // System.out.println(elapsedTime);
         elapsedTime += delta;
         if (elapsedTime > frameLengthMs)
         {

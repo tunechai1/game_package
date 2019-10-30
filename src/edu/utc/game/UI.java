@@ -27,8 +27,8 @@ import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
-public class UI
-{
+public class UI {
+	
 	private long window;
 	private long audioDevice;
 	private int width;
@@ -36,23 +36,29 @@ public class UI
 	
 	public void init(int width, int height, String title)
 	{
+		
 		// initialize graphics
 		if ( !glfwInit() )
 			throw new IllegalStateException("Unable to initialize GLFW");
 		
 		window = glfwCreateWindow(width, height, title, NULL, NULL);
+		
 
 		if ( window == NULL )
 			throw new RuntimeException("Failed to create the GLFW window");
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
-
+	
+		
 		//set up OpenGL
 		glfwMakeContextCurrent(window);
 		GL.createCapabilities();
 		glfwSwapInterval(1);
-
+		
+		
+		
+		
 		// set projection to dimensions of window
         // set viewport to entire window
         GL11.glViewport(0,0,width,height);
@@ -76,19 +82,11 @@ public class UI
     	AL.createCapabilities(deviceCaps);    	
         this.width=width;
         this.height=height;
-		glfwShowWindow(window);
-	}// end method
+        
+        glfwShowWindow(window);
 
-	public long getWindow() { return window; }// end method
-
-	public int getWidth() { return width; }// end method
-
-	public int getHeight() { return height; }// end method
-
-	public boolean keyPressed(int key) {
-		return glfwGetKey(window, key) == GLFW_PRESS;
-	}// end method
-
+	}
+	
 	public void showMouseCursor(boolean show)
 	{
 		if (show)
@@ -100,7 +98,7 @@ public class UI
 			GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
 			
 		}
-	}// end method
+	}
 	
 	public void enableMouseCursor(boolean enable)
 	{
@@ -113,7 +111,7 @@ public class UI
 			GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 			
 		}
-	}// end method
+	}
 	
 	public XYPair<Integer> getMouseLocation()
 	{
@@ -121,15 +119,22 @@ public class UI
 		double[] y = new double[1];
 		GLFW.glfwGetCursorPos(window,  x,  y);
 		return new XYPair<Integer>((int)x[0],(int)y[0]);
-	}// end method
+	}
 	
 	public boolean mouseButtonIsPressed(int button)
 	{
 		return GLFW.glfwGetMouseButton(window, button) == GLFW.GLFW_PRESS;
-	}// end method
+	}
 	
-	public void destroy()
-	{
+	public long getWindow() { return window; }
+	public int getWidth() { return width; }
+	public int getHeight() { return height; }
+	
+	public boolean keyPressed(int key) { 
+		return glfwGetKey(window, key) == GLFW_PRESS;
+	}
+	
+	public void destroy(){
 		ALC10.alcCloseDevice(audioDevice);
 		ALC.destroy();
 
@@ -138,5 +143,10 @@ public class UI
 		org.lwjgl.glfw.Callbacks.glfwFreeCallbacks(window);
 		GLFW.glfwDestroyWindow(window);
 		GLFW.glfwTerminate();
-	}// end method
-}// end class
+	}
+	
+	
+	
+
+}
+

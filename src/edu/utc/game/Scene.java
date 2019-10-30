@@ -1,6 +1,9 @@
 package edu.utc.game;
 
-public interface Scene
-{
+public interface Scene {
+	
 	Scene drawFrame(int delta);
-}// end interface
+	default void onKeyEvent(int key, int scancode, int action, int mods)  { };
+	default void onMouseEvent(int button, int action, int mods)  { }
+
+}
