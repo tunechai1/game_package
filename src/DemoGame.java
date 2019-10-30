@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import edu.utc.game.Scene;
+import edu.utc.game.Texture;
 
 public class DemoGame extends Game implements Scene {
 	
@@ -104,7 +105,6 @@ public class DemoGame extends Game implements Scene {
 	private class Player extends GameObject
 	{
 
-		
 		public DIR direction=DIR.LEFT;
 		
 		public Player()

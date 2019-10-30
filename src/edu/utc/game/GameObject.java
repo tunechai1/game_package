@@ -12,7 +12,6 @@ public  class GameObject
 	protected float b;
 
 	protected Rectangle hitbox = new Rectangle();
-	protected Texture sprite;
 
 	protected void setColor(float r, float g, float b) {
 		this.r = r;
@@ -54,8 +53,6 @@ public  class GameObject
 		return hitbox.intersects(other.hitbox);
 
 	}// end method
-
-	public void setTexture(Texture newTexture) { sprite = newTexture; }// end method
 
 	public Rectangle intersection(GameObject other)
 	{

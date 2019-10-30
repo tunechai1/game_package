@@ -1,6 +1,7 @@
 package edu.utc.game;
 
-public class XYPair<T> {
+public class XYPair<T>
+{
 	
 	public T x;
 	public T y;
@@ -10,5 +11,9 @@ public class XYPair<T> {
 		this.x = x;
 		this.y = y;
 	}
-	
+
+	public String toString()
+	{
+		return "X: " + x + " Y: " + y;
+	}
 }
