@@ -4,29 +4,40 @@ public class Animation
 {
     private Texture frames;
     private int frameLengthMs;
-    private int framesInSheet;
     private int currentFrame = 0;
     private int elapsedTime = 0;
+    private int numFrameSheetRows;
+    private int numFrameSheetCols;
+    private int[] frameIDs;
+    private TileSheet animationSheet;
 
-    public Animation(Texture frames, int framesInSheet, int frameLengthMs)
+    public Animation(Texture frames, TileSheet animationSheet, int[] frameIDs,int frameLengthMs)
     {
-        this.framesInSheet = framesInSheet;
+        this.animationSheet = animationSheet;
+        this.frameIDs = frameIDs;
+        numFrameSheetRows = animationSheet.getNumRows();
+        numFrameSheetCols = animationSheet.getNumColumns();
         this.frames = frames;
         this.frameLengthMs = frameLengthMs;
         frames.setRenderStartP(new XYPair<>(0f, 0f));
-        frames.setRenderEndP(new XYPair<>((1f / framesInSheet), 1f));
+        frames.setRenderEndP(new XYPair<>((1f / numFrameSheetRows), 1f));
     }// end constructor
 
     public int play(int delta)
     {
-        // System.out.println(elapsedTime);
         elapsedTime += delta;
         if (elapsedTime > frameLengthMs)
         {
             elapsedTime = 0;
-            currentFrame = (currentFrame >= framesInSheet - 1)? 0: currentFrame + 1;
-            frames.setRenderStartP(new XYPair<>((1f / framesInSheet) * currentFrame, 0f));
-            frames.setRenderEndP(new XYPair<>((1f / framesInSheet) * (currentFrame + 1), 1f));
+            currentFrame = (currentFrame >= frameIDs.length - 1)? 0: currentFrame + 1;
+            frames.setRenderStartP((XYPair<Float>) animationSheet.getRenderPoints().get(frameIDs[currentFrame]).get(0));
+            frames.setRenderEndP((XYPair<Float>) animationSheet.getRenderPoints().get(frameIDs[currentFrame]).get(1));
+
+
+            //frames.setRenderStartP(new XYPair<>((1f / numFrameSheetRows) * currentFrame, (1f / numFrameSheetCols) ));
+
+
+            //frames.setRenderEndP(new XYPair<>((1f / numFrameSheetRows) * (currentFrame + 1), 1f));
         }
         return this.currentFrame;
     }// end method
