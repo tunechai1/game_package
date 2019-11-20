@@ -24,20 +24,24 @@ public  class GameObject
 		int x = (int)this.hitbox.getX();
 		int y = (int)this.hitbox.getY();
 
-		if (y <= minY)
+		if (y < minY)
 		{
-			this.hitbox.setLocation(x, minY);
+			hitbox.setLocation(x, minY);
+			y = minY;
 		}
-		else if (y >= maxY)
+		else if (y > maxY)
 		{
-			this.hitbox.setLocation(x, maxY);
+			hitbox.setLocation(x, maxY);
+			y = maxY;
 		}
-		if (x >= maxX)
+		if (x > maxX)
 		{
-			this.hitbox.setLocation(maxX, y);
+			hitbox.setLocation(maxX, y);
+			x = maxX;
 		}
-		else if (x <= minX) {
-			this.hitbox.setLocation(minX, y);
+		else if (x < minX) {
+			hitbox.setLocation(minX, y);
+			x = minX;
 		}
 
 	}// end method

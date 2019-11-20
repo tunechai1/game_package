@@ -20,7 +20,7 @@ public class Animation
         this.frames = frames;
         this.frameLengthMs = frameLengthMs;
         frames.setRenderStartP(new XYPair<>(0f, 0f));
-        frames.setRenderEndP(new XYPair<>((1f / numFrameSheetRows), 1f));
+        frames.setRenderEndP(new XYPair<>(1f / numFrameSheetCols, 1f / numFrameSheetRows));
     }// end constructor
 
     public int play(int delta)
@@ -32,12 +32,6 @@ public class Animation
             currentFrame = (currentFrame >= frameIDs.length - 1)? 0: currentFrame + 1;
             frames.setRenderStartP((XYPair<Float>) animationSheet.getRenderPoints().get(frameIDs[currentFrame]).get(0));
             frames.setRenderEndP((XYPair<Float>) animationSheet.getRenderPoints().get(frameIDs[currentFrame]).get(1));
-
-
-            //frames.setRenderStartP(new XYPair<>((1f / numFrameSheetRows) * currentFrame, (1f / numFrameSheetCols) ));
-
-
-            //frames.setRenderEndP(new XYPair<>((1f / numFrameSheetRows) * (currentFrame + 1), 1f));
         }
         return this.currentFrame;
     }// end method
@@ -56,6 +50,8 @@ public class Animation
 
     public void setCurrentFrame(int currentFrame) {
         this.currentFrame = currentFrame;
+        frames.setRenderStartP((XYPair<Float>) animationSheet.getRenderPoints().get(frameIDs[currentFrame]).get(0));
+        frames.setRenderEndP((XYPair<Float>) animationSheet.getRenderPoints().get(frameIDs[currentFrame]).get(1));
     }// end method
 
     public int getElapsedTime() {
