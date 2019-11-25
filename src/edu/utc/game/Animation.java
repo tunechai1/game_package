@@ -30,8 +30,8 @@ public class Animation
         {
             elapsedTime = 0;
             currentFrame = (currentFrame >= frameIDs.length - 1)? 0: currentFrame + 1;
-            frames.setRenderStartP((XYPair<Float>) animationSheet.getRenderPoints().get(frameIDs[currentFrame]).get(0));
-            frames.setRenderEndP((XYPair<Float>) animationSheet.getRenderPoints().get(frameIDs[currentFrame]).get(1));
+            //frames.setRenderStartP((XYPair<Float>) animationSheet.getRenderPoints().get(frameIDs[currentFrame]).get(0));
+            //frames.setRenderEndP((XYPair<Float>) animationSheet.getRenderPoints().get(frameIDs[currentFrame]).get(1));
         }
         return this.currentFrame;
     }// end method
@@ -69,4 +69,10 @@ public class Animation
     public void setFrameLengthMs(int frameLengthMs) {
         this.frameLengthMs = frameLengthMs;
     }// end method
+
+    public void draw(GameObject object)
+    {
+        setCurrentFrame(currentFrame);
+        frames.draw(object);
+    }
 }// end class
